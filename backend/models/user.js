@@ -14,7 +14,12 @@ const UserSchema = new Schema({
 	password: {
 		type: String,
 		required: true
+	},
+	// Applicant or Recruiter
+	usertype: {
+		type: String,
+		required: true
 	}
 });
 
-module.exports = User = mongoose.model("Users", UserSchema);
+module.exports = User = mongoose.model("user", UserSchema);
