@@ -1,23 +1,18 @@
 import React from 'react';
-import { BrowserRouter as Router, Route, Link } from "react-router-dom";
+import { BrowserRouter as Router, Route, Link, Redirect } from "react-router-dom";
 import "bootstrap/dist/css/bootstrap.min.css"
 
-import UsersList from './components/Users/UsersList'
-import Home from './components/Common/Home'
-import Register from './components/Common/Register'
-import Navbar from './components/templates/Navbar'
-import Profile from './components/Users/Profile'
+import Login from './components/Login'
+import Register from './components/Register'
+import UsersList from './components/UsersList'
 
 function App() {
   return (
     <Router>
       <div className="container">
-        <Navbar/>
-        <br/>
-        <Route path="/" exact component={Home}/>
-        <Route path="/users" exact component={UsersList}/>
-        <Route path="/register" component={Register}/>
-        <Route path="/profile" component={Profile}/>
+        <Redirect from="/" to="/login" />
+        <Route path="/login" exact component={Login}/>
+        <Route path="/register" exact component={Register}/>
       </div>
     </Router>
   );
