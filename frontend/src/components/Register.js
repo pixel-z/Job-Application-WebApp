@@ -47,9 +47,13 @@ export default class Register extends Component {
             password: this.state.password,
             usertype: this.state.usertype
         }
-        axios.post('http://localhost:4000/user/register', newUser)
+        axios.post('http://localhost:4000/register', newUser)
             .then(res => {
-                alert("Created\t" + res.data.name);
+                if(!res.data.name)
+                    alert("Invalid credentials");
+                else
+                    alert("Created\t" + res.data.name);
+
                 console.log(res.data)
             })
             .catch((error) => {
@@ -72,10 +76,10 @@ export default class Register extends Component {
                     <div className="collapse navbar-collapse">
                         <ul className="navbar-nav mr-auto">
                             <li className="navbar-item">
-                                <Link to="/Login" className="nav-link">Login</Link>
+                                <Link to="/login" className="nav-link">Login</Link>
                             </li>
                             <li className="navbar-item">
-                                <Link to="/Register" className="nav-link">Register</Link>
+                                <Link to="/register" className="nav-link">Register</Link>
                             </li>
                         </ul>
                     </div>

@@ -5,38 +5,102 @@ const bodyParser = require('body-parser');
 
 const app = express();
 const PORT = 4000;
-const DB_NAME = 'db'
+const DB = 'db'
 
-// routes
-var test = require('./routes/test');
-var index = require('./routes/index');
-var user = require('./routes/user');
+// Loading user model
+const User = require('./models/user');
 
 app.use(cors());
 app.use(bodyParser.json());
+app.use(express.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
 // Connection to MongoDB
-mongoose.connect('mongodb://127.0.0.1:27017/' + DB_NAME, { useNewUrlParser: true , useUnifiedTopology: true });
+mongoose.connect('mongodb://127.0.0.1:27017/' + DB, { useNewUrlParser: true , useUnifiedTopology: true });
 const connection = mongoose.connection;
 connection.once('open', function() { 
     console.log("MongoDB database connection established successfully !");
 })
 
-// MongoDB Atlas (Online db)
-// const uri = "mongodb+srv://newuser:newuser@cluster0.k0ziq.mongodb.net/db?retryWrites=true&w=majority"
+// Getting all the users
+app.get("/user", function(req, res) {
+    User.find(function(err, users) {
+		if (err) {
+			console.log(err);
+		} else {
+			res.json(users);
+		}
+	})
+});
 
-// mongoose.connect(uri, { useNewUrlParser: true, useCreateIndex: true, useUnifiedTopology: true });
-// const connection = mongoose.connection;
-// connection.once('open', () => {
-//     console.log("MongoDB database connection established successfully");
-// });
 
+const {check,validationResult} = require('express-validator'); // to validate if given email struct exists
 
-// API endpoints
-app.use("/test", test);
-app.use("/", index);
-app.use("/user", user);
+// Registration
+app.post("/register", [
+    check('email').isEmail()
+], (req, res) => {
+
+    // validate email structure 
+    const errors = validationResult(req);
+    if(!errors.isEmpty())
+    {
+        return res.status(422).json({
+            errors: "Invalid email", 
+        });
+    }
+
+    const email = req.body.email;
+    
+    // Check if email already exists
+    User.findOne({ email }).then(user => {
+        if(!user)
+        {
+            // email is not already used
+            const newUser = new User({
+                name: req.body.name,
+                email: req.body.email,
+                password: req.body.password,
+                usertype: req.body.usertype
+            });
+        
+            newUser.save()
+                .then(user => {
+                    res.status(200).json(user);
+                })
+                .catch(err => {
+                    res.status(400).send(err);
+                });
+        }
+        else
+        {
+            res.send("Email already exists");
+            return user;
+        }
+    });
+
+});
+
+// Login
+app.post('/login', (req, res) => {
+
+    const email = req.body.email;
+    const password = req.body.password;
+    const usertype = req.body.usertype;
+
+    User.findOne({ email, password, usertype }).then(user => {
+        // Checking if password and email combination is correct
+        if(!user)
+        {
+            return res.status(404).json({
+				error: "User not found",
+			});
+        }
+        else{
+            res.send("User found");
+        }
+    });
+})
 
 app.listen(PORT, () => {
     console.log(`Server running on port: ${PORT}`);
