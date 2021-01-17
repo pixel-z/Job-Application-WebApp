@@ -17,7 +17,7 @@ function App() {
         <Route path="/login" exact component={Login}/>
         <Route path="/register" exact component={Register}/>
         <Route path="/applicantdash" exact component={Applicantdash}/>
-        <Route path="/applicantdash/profile" exact component={Profile}/>
+        <Route path="/profile" exact component={Profile}/>
         <Route path="/users" exact component={UsersList}/>
       </div>
     </Router>

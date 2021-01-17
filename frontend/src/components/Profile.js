@@ -13,6 +13,7 @@ class Profile extends Component {
         }
         this.onChangeUsername = this.onChangeUsername.bind(this);
         this.onChangeEmail = this.onChangeEmail.bind(this);
+        this.logout = this.logout.bind(this);
     }
 
     onChangeUsername(event) {
@@ -23,38 +24,26 @@ class Profile extends Component {
         this.setState({ email: event.target.value });
     }
 
+    logout(e){
+        e.preventDefault();
+        localStorage.clear();
+        this.props.history.push("/login");
+    }
+
+    componentDidMount() {
+        if ((localStorage.getItem("usertype") === "applicant" && localStorage.getItem("email")) || (localStorage.getItem("usertype") === "recruiter" && localStorage.getItem("email"))) 
+        ;
+        else
+            this.props.history.push("/login");
+    }
+
     onSubmit(e) {
         e.preventDefault();
 
-        // const newUser = {
-        //     name: this.state.name,
-        //     email: this.state.email,
-        //     password: this.state.password,
-        //     usertype: this.state.usertype
-        // }
-        // axios.post('http://localhost:4000/register', newUser)
-        //     .then(res => {
-        //         if(!res.data.name)
-        //             alert("Invalid credentials");
-        //         else
-        //             alert("Created\t" + res.data.name);
-
-        //         console.log(res.data)
-        //     })
-        //     .catch((error) => {
-        //         alert("Invalid inputs");
-        //         console.log(error)
-        //     });
-
-        // this.setState({
-        //     name: '',
-        //     email: '',
-        //     password: '',
-        //     usertype: ''
-        // });
     }
 
     render() {
+
         return (
             <div className="container">
                 <nav className="navbar navbar-expand-lg navbar-light bg-light">
@@ -64,7 +53,7 @@ class Profile extends Component {
                                 <Link to="/login" className="nav-link">Logout</Link>
                             </li>
                             <li className="navbar-item">
-                                <Link to="/applicantdash" className="nav-link">Dashboard</Link>
+                                <Link className="nav-link" to="/applicantdash">Dashboard</Link>
                             </li>
                         </ul>
                     </div>

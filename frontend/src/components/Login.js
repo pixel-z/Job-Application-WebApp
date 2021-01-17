@@ -31,6 +31,19 @@ export default class Login extends Component {
         this.setState({ usertype: event.target.value });
     }
 
+    componentDidMount() {
+        // console.log("localstorage email: " + localStorage.getItem("email"));
+        // console.log("localstorage usertype: " + localStorage.getItem("usertype"));
+
+        // adding localstorage so that after logging in and refreshing the page, data is not lost (in applicantdash, etc)
+        if (localStorage.getItem("usertype") === "applicant" && localStorage.getItem("email")) 
+            this.props.history.push("/applicantdash");
+        else if (localStorage.getItem("usertype") === "recruiter" && localStorage.getItem("email")) 
+            this.props.history.push("/recruiterdash");
+        else
+            this.props.history.push("/login");
+    }
+
     onSubmit(e) {
         e.preventDefault();
 
@@ -39,17 +52,33 @@ export default class Login extends Component {
             password: this.state.password,
             usertype: this.state.usertype
         }
-        console.log(newUser);
+
         axios.post('http://localhost:4000/login', newUser)
             .then(res => {
                 alert("Logged In\t");
-                console.log(res.data)
+
+                localStorage.setItem("email",newUser.email);
+                localStorage.setItem("usertype",newUser.usertype);
+
+                console.log("localstorage email: " + localStorage.getItem("email") + "localstorage usertype: " + localStorage.getItem("usertype"));
                 
                 // window.location.href = '/users';
-                this.props.history.push({
-                    pathname: '/applicantdash',
-                    // data: res.data
-                });
+
+                // redirecting and sending data to dash
+                if (newUser.usertype === "applicant") 
+                {
+                    this.props.history.push({
+                        pathname: '/applicantdash',
+                        aboutProps: newUser.email   // (var aboutProps can have any name)
+                    });
+                }
+                else
+                {
+                    this.props.history.push({
+                        pathname: '/recruiterdash',
+                        aboutProps: newUser.email   // (var aboutProps can have any name)
+                    });
+                }
             })
             .catch((error) => {
                 alert("Invalid inputs");
