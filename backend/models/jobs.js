@@ -15,7 +15,7 @@ const JobSchema = new Schema({
 		type: String,
 		required: true
 	},
-	datefofposting: {
+	dateofposting: {
 		type: Date,
 		required: true
 	},
@@ -25,4 +25,4 @@ const JobSchema = new Schema({
 	}
 });
 
-module.exports = Job = mongoose.model("job", jobSchema);
+module.exports = Job = mongoose.model("job", JobSchema);

@@ -9,6 +9,7 @@ const DB = 'db'
 
 // Loading user model
 const User = require('./models/user');
+const Profile = require('./models/profile');
 
 app.use(cors());
 app.use(bodyParser.json());

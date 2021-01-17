@@ -44,7 +44,12 @@ export default class Login extends Component {
             .then(res => {
                 alert("Logged In\t");
                 console.log(res.data)
-                // window.location.href = '/dashboard'
+                
+                // window.location.href = '/users';
+                this.props.history.push({
+                    pathname: '/applicantdash',
+                    // data: res.data
+                });
             })
             .catch((error) => {
                 alert("Invalid inputs");
@@ -54,7 +59,7 @@ export default class Login extends Component {
         this.setState({
             email: '',
             password: '',
-            usertype: ''
+            usertype: 'applicant'
         });
     }
 
