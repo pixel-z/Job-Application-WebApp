@@ -13,7 +13,6 @@ class Profile extends Component {
         }
         this.onChangeUsername = this.onChangeUsername.bind(this);
         this.onChangeEmail = this.onChangeEmail.bind(this);
-        this.logout = this.logout.bind(this);
     }
 
     onChangeUsername(event) {
@@ -24,14 +23,8 @@ class Profile extends Component {
         this.setState({ email: event.target.value });
     }
 
-    logout(e){
-        e.preventDefault();
-        localStorage.clear();
-        this.props.history.push("/login");
-    }
-
     componentDidMount() {
-        if ((localStorage.getItem("usertype") === "applicant" && localStorage.getItem("email")) || (localStorage.getItem("usertype") === "recruiter" && localStorage.getItem("email"))) 
+        if ((localStorage.getItem("usertype") === "applicant" || localStorage.getItem("usertype") === "recruiter") && localStorage.getItem("email")) 
         ;
         else
             this.props.history.push("/login");
@@ -49,9 +42,6 @@ class Profile extends Component {
                 <nav className="navbar navbar-expand-lg navbar-light bg-light">
                     <div className="collapse navbar-collapse">
                         <ul className="navbar-nav mr-auto">
-                            <li className="navbar-item">
-                                <Link to="/login" className="nav-link">Logout</Link>
-                            </li>
                             <li className="navbar-item">
                                 <Link className="nav-link" to="/applicantdash">Dashboard</Link>
                             </li>

@@ -3,20 +3,27 @@ import axios from 'axios';
 import "bootstrap/dist/css/bootstrap.min.css"
 import { Link } from 'react-router-dom';
 
-export default class Login extends Component {
+export default class Register extends Component {
     
     constructor(props) {
         super(props);
+
         this.state = {
+            name: '',
             email: '',
             password: '',
             usertype: 'applicant'
         }
 
+        this.onChangeUsername = this.onChangeUsername.bind(this);
         this.onChangeEmail = this.onChangeEmail.bind(this);
         this.onChangePassword = this.onChangePassword.bind(this);
         this.onChangeUsertype = this.onChangeUsertype.bind(this);
         this.onSubmit = this.onSubmit.bind(this);
+    }
+    
+    onChangeUsername(event) {
+        this.setState({ name: event.target.value });
     }
 
     onChangeEmail(event) {
@@ -31,54 +38,34 @@ export default class Login extends Component {
         this.setState({ usertype: event.target.value });
     }
 
-    componentDidMount() {
-        // console.log("localstorage email: " + localStorage.getItem("email"));
-        // console.log("localstorage usertype: " + localStorage.getItem("usertype"));
-
-        // adding localstorage so that after logging in and refreshing the page, data is not lost (in applicantdash, etc)
-        if (localStorage.getItem("usertype") === "applicant" && localStorage.getItem("email")) 
-            this.props.history.push("/applicantdash");
-        else if (localStorage.getItem("usertype") === "recruiter" && localStorage.getItem("email")) 
-            this.props.history.push("/recruiterdash");
-        else
-            this.props.history.push("/login");
-    }
-
     onSubmit(e) {
         e.preventDefault();
 
         const newUser = {
+            name: this.state.name,
             email: this.state.email,
             password: this.state.password,
             usertype: this.state.usertype
         }
-
-        axios.post('http://localhost:4000/login', newUser)
+        axios.post('http://localhost:4000/register', newUser)
             .then(res => {
-                alert("Logged In\t");
-
-                localStorage.setItem("email",newUser.email);
-                localStorage.setItem("usertype",newUser.usertype);
-
-                console.log("localstorage email: " + localStorage.getItem("email") + "localstorage usertype: " + localStorage.getItem("usertype"));
-                
-                // window.location.href = '/users';
-
-                // redirecting and sending data to dash
-                if (newUser.usertype === "applicant") 
-                    this.props.history.push('/applicantdash');
+                if(!res.data.name)
+                    alert("Invalid credentials");
                 else
-                    this.props.history.push('/recruiterdash');
+                    alert("Created\t" + res.data.name);
+
+                console.log(res.data)
             })
             .catch((error) => {
                 alert("Invalid inputs");
                 console.log(error)
             });
-            
+
         this.setState({
+            name: '',
             email: '',
             password: '',
-            usertype: 'applicant'
+            usertype: ''
         });
     }
 
@@ -97,16 +84,22 @@ export default class Login extends Component {
                         </ul>
                     </div>
                 </nav>
-
-                
                 <form onSubmit={this.onSubmit}>
+                    <div className="form-group">
+                        <label>Username: </label>
+                        <input type="text" 
+                               className="form-control" 
+                               value={this.state.name}
+                               onChange={this.onChangeUsername}
+                               />
+                    </div>
                     <div className="form-group">
                         <label>Email: </label>
                         <input type="text" 
                                className="form-control" 
                                value={this.state.email}
                                onChange={this.onChangeEmail}
-                               />
+                               />  
                     </div>
                     <div className="form-group">
                         <label>Password: </label>
@@ -126,7 +119,7 @@ export default class Login extends Component {
                         
                     </div>
                     <div className="form-group">
-                        <input type="submit" value="login" className="btn btn-primary"/>
+                        <input type="submit" value="Register" className="btn btn-primary"/>
                     </div>
                 </form>
             </div>

@@ -7,31 +7,12 @@ export default class Register extends Component {
     
     constructor(props) {
         super(props);
-
         this.state = {
-            name: '',
-            email: '',
-            password: '',
             usertype: 'applicant'
         }
 
-        this.onChangeUsername = this.onChangeUsername.bind(this);
-        this.onChangeEmail = this.onChangeEmail.bind(this);
-        this.onChangePassword = this.onChangePassword.bind(this);
         this.onChangeUsertype = this.onChangeUsertype.bind(this);
         this.onSubmit = this.onSubmit.bind(this);
-    }
-    
-    onChangeUsername(event) {
-        this.setState({ name: event.target.value });
-    }
-
-    onChangeEmail(event) {
-        this.setState({ email: event.target.value });
-    }
-    
-    onChangePassword(event) {
-        this.setState({ password: event.target.value });
     }
     
     onChangeUsertype(event) {
@@ -40,33 +21,12 @@ export default class Register extends Component {
 
     onSubmit(e) {
         e.preventDefault();
-
-        const newUser = {
-            name: this.state.name,
-            email: this.state.email,
-            password: this.state.password,
-            usertype: this.state.usertype
+        if (this.state.usertype === "applicant") {
+            this.props.history.push('/applicantregister');
         }
-        axios.post('http://localhost:4000/register', newUser)
-            .then(res => {
-                if(!res.data.name)
-                    alert("Invalid credentials");
-                else
-                    alert("Created\t" + res.data.name);
-
-                console.log(res.data)
-            })
-            .catch((error) => {
-                alert("Invalid inputs");
-                console.log(error)
-            });
-
-        this.setState({
-            name: '',
-            email: '',
-            password: '',
-            usertype: ''
-        });
+        else {
+            this.props.history.push('/recruiterregister');
+        }
     }
 
     render() {
@@ -86,30 +46,6 @@ export default class Register extends Component {
                 </nav>
                 <form onSubmit={this.onSubmit}>
                     <div className="form-group">
-                        <label>Username: </label>
-                        <input type="text" 
-                               className="form-control" 
-                               value={this.state.name}
-                               onChange={this.onChangeUsername}
-                               />
-                    </div>
-                    <div className="form-group">
-                        <label>Email: </label>
-                        <input type="text" 
-                               className="form-control" 
-                               value={this.state.email}
-                               onChange={this.onChangeEmail}
-                               />  
-                    </div>
-                    <div className="form-group">
-                        <label>Password: </label>
-                        <input type="text" 
-                               className="form-control" 
-                               value={this.state.password}
-                               onChange={this.onChangePassword}
-                               />  
-                    </div>
-                    <div className="form-group">
                         <label>Usertype: </label>
                         <br/>
                         <select name="usertype" value={this.state.usertype} onChange={this.onChangeUsertype}>
@@ -119,7 +55,7 @@ export default class Register extends Component {
                         
                     </div>
                     <div className="form-group">
-                        <input type="submit" value="Register" className="btn btn-primary"/>
+                        <input type="submit" value="Submit" className="btn btn-primary"/>
                     </div>
                 </form>
             </div>
