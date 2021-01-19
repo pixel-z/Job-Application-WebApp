@@ -51,8 +51,6 @@ const UserSchema = new Schema({
 	contact: {
 		type: Number,
 		required: false,
-		min: 10,
-		max: 10
 	}
 
 });
