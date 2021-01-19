@@ -1,9 +1,10 @@
 import React, {Component} from 'react';
 import axios from 'axios';
 import "bootstrap/dist/css/bootstrap.min.css"
+// import { Form, FormGroup, Label, Progress,Button } from 'reactstrap';
 import { Link } from 'react-router-dom';
 
-export default class Recruiterregister extends Component {
+export default class Applicantregister extends Component {
     
     constructor(props) {
         super(props);
@@ -12,32 +13,13 @@ export default class Recruiterregister extends Component {
             name: '',
             email: '',
             password: '',
-            usertype: 'recruiter'
+            usertype: 'recruiter',
+            contact: '',
+            bio: ''
         }
-
-        this.onChangeUsername = this.onChangeUsername.bind(this);
-        this.onChangeEmail = this.onChangeEmail.bind(this);
-        this.onChangePassword = this.onChangePassword.bind(this);
-        this.onChangeUsertype = this.onChangeUsertype.bind(this);
         this.onSubmit = this.onSubmit.bind(this);
     }
     
-    onChangeUsername(event) {
-        this.setState({ name: event.target.value });
-    }
-
-    onChangeEmail(event) {
-        this.setState({ email: event.target.value });
-    }
-    
-    onChangePassword(event) {
-        this.setState({ password: event.target.value });
-    }
-    
-    onChangeUsertype(event) {
-        this.setState({ usertype: event.target.value });
-    }
-
     onSubmit(e) {
         e.preventDefault();
 
@@ -45,7 +27,9 @@ export default class Recruiterregister extends Component {
             name: this.state.name,
             email: this.state.email,
             password: this.state.password,
-            usertype: this.state.usertype
+            usertype: this.state.usertype,
+            contact: this.state.contact,
+            bio: this.state.bio,
         }
         axios.post('http://localhost:4000/register', newUser)
             .then(res => {
@@ -65,6 +49,8 @@ export default class Recruiterregister extends Component {
             name: '',
             email: '',
             password: '',
+            contact: '',
+            bio: '',
             usertype: 'recruiter'
         });
     }
@@ -90,7 +76,7 @@ export default class Recruiterregister extends Component {
                         <input type="text" 
                                className="form-control" 
                                value={this.state.name}
-                               onChange={this.onChangeUsername}
+                               onChange={event => this.setState({name: event.target.value})}
                                />
                     </div>
                     <div className="form-group">
@@ -98,7 +84,7 @@ export default class Recruiterregister extends Component {
                         <input type="text" 
                                className="form-control" 
                                value={this.state.email}
-                               onChange={this.onChangeEmail}
+                               onChange={event => this.setState({email: event.target.value})}
                                />  
                     </div>
                     <div className="form-group">
@@ -106,11 +92,23 @@ export default class Recruiterregister extends Component {
                         <input type="text" 
                                className="form-control" 
                                value={this.state.password}
-                               onChange={this.onChangePassword}
+                               onChange={event => this.setState({password: event.target.value})}
                                />  
                     </div>
                     <div className="form-group">
-                        <input type="submit" value="Register" className="btn btn-primary"/>
+                        <label>Contact: </label>
+                        <input type="text" 
+                               className="form-control" 
+                               value={this.state.contact}
+                               onChange={event => this.setState({contact: event.target.value})}
+                               />  
+                    </div>
+                    <div className="form-group">
+                        <label>Bio: </label>
+                        <textarea className="form-control" rows="10" onChange={event => this.setState({bio: event.target.value})} type="text"/>
+                    </div>
+                    <div className="form-group">
+                        <input type="submit" value="Register" className="btn btn-success"/>
                     </div>
                 </form>
             </div>

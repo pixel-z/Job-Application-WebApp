@@ -168,7 +168,7 @@ export default class Applicantregister extends Component {
                         {
                             this.state.education.map((education, index) => {
                                 return (
-                                    <div className="box">
+                                    <div className="box" key={index}>
                                         <input name="institute" placeholder="institute" value={education.institute} onChange={this.saveEducation.bind(this, index)} />
                                         <input name="startyear" placeholder="startyear" value={education.startyear} onChange={this.saveEducation.bind(this, index)} />
                                         <input name="endyear" placeholder="endyear" value={education.endyear} onChange={this.saveEducation.bind(this, index)} />

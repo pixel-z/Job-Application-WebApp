@@ -57,7 +57,6 @@ app.post("/register", [
     User.findOne({ email }).then(user => {
         if(!user)
         {
-            console.log(req.body.education);
             // email is not already used
             const newUser = new User({
                 name: req.body.name,
@@ -67,6 +66,8 @@ app.post("/register", [
                 rating: req.body.rating,
                 skill: req.body.skill,
                 education: req.body.education,
+                contact: req.body.contact,
+                bio: req.body.bio,
             });
         
             newUser.save()
