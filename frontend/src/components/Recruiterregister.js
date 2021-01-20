@@ -38,11 +38,12 @@ export default class Applicantregister extends Component {
                 else
                     alert("Created\t" + res.data.name);
 
-                console.log(res.data)
+                // console.log(res.data)
             })
             .catch((error) => {
                 alert("Invalid inputs");
-                console.log(error)
+                console.log(error.response.data);
+                console.log("error")
             });
 
         this.setState({

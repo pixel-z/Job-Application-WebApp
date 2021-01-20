@@ -7,6 +7,7 @@ import Register from './components/Register'
 import Applicantregister from './components/Applicantregister'
 import Recruiterregister from './components/Recruiterregister'
 import Applicantdash from './components/Applicantdash'
+import Recruiterdash from './components/Recruiterdash'
 import UsersList from './components/UsersList'
 import Profile from './components/Profile'
 
@@ -21,6 +22,7 @@ function App() {
         <Route path="/applicantregister" exact component={Applicantregister}/>
         <Route path="/recruiterregister" exact component={Recruiterregister}/>
         <Route path="/applicantdash" exact component={Applicantdash}/>
+        <Route path="/recruiterdash" exact component={Recruiterdash}/>
         <Route path="/profile" exact component={Profile}/>
         <Route path="/users" exact component={UsersList}/>
       </div>
