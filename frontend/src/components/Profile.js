@@ -28,6 +28,7 @@ class Profile extends Component {
         const newUser = {
             email: localStorage.getItem('email'),
         }
+        console.log(newUser.email);
 
         axios.post('http://localhost:4000/getuser',newUser).then(res => {
             // this.setState({user: res.data})

@@ -141,7 +141,7 @@ app.post('/updateuser', (req, res) => {
 			});
         }
         else {
-            User.updateOne(
+            user.updateOne(
                 {name: req.body.name, contact: req.body.contact, bio: req.body.bio, password: req.body.password},
                 function(err, user) {
                     if(err) return;
