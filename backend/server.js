@@ -9,7 +9,6 @@ const DB = 'db'
 
 // Loading user model
 const User = require('./models/user');
-const Profile = require('./models/profile');
 
 app.use(cors());
 app.use(bodyParser.json());
@@ -123,7 +122,8 @@ app.post('/getuser', (req, res) => {
                 name: user.name,
                 contact: user.contact,
                 bio: user.bio,
-                // skill: user.skill,
+                skill: user.skill,
+                education: user.education,
                 password: user.password,
             });
         }
@@ -142,7 +142,7 @@ app.post('/updateuser', (req, res) => {
         }
         else {
             user.updateOne(
-                {name: req.body.name, contact: req.body.contact, bio: req.body.bio, password: req.body.password},
+                {name: req.body.name, contact: req.body.contact, bio: req.body.bio, password: req.body.password, skill: req.body.skill, education: req.body.education},
                 function(err, user) {
                     if(err) return;
                     else {
@@ -155,6 +155,7 @@ app.post('/updateuser', (req, res) => {
                 contact: user.contact,
                 bio: user.bio,
                 skill: user.skill,
+                education: user.education,
                 password: user.password,
             });
         }

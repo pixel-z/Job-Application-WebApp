@@ -13,10 +13,56 @@ class Profile extends Component {
             name: '',
             contact: '',
             bio: '',
-            // skill: [],
+            skill: [],
+            education: [{institute:'', startyear:'', endyear:''}],
             password: '',
         }
         this.onSubmit = this.onSubmit.bind(this);
+    }
+
+    saveSkill = i => e => {
+        let skill = [...this.state.skill]
+        skill[i]=e.target.value
+        this.setState({
+            skill
+        })
+    }
+    deleteSkill = i => e => {
+        e.preventDefault()
+        let skill = [
+            ...this.state.skill.slice(0, i),
+            ...this.state.skill.slice(i + 1)
+        ]
+        this.setState({
+            skill
+        })
+    }
+    addSkill = e => {
+        e.preventDefault()
+        let skill = this.state.skill.concat([''])
+        this.setState({
+            skill
+        })
+    }
+
+    saveEducation = (i, e) => {
+        const { name, value } = e.target;
+        const education = [...this.state.education];
+        education[i][name] = value;
+        this.setState({ education });
+    }
+    addEducation = () => {
+        const item = { institute: '', startyear: '', endyear: '' }
+        this.setState({
+            education: [...this.state.education, item]
+        });
+    }
+    deleteEducation = (id) => {
+        let education = [...this.state.education]
+        education.splice(id, 1);
+        this.setState({
+            education
+        });
     }
 
     componentDidMount() {
@@ -28,16 +74,18 @@ class Profile extends Component {
         const newUser = {
             email: localStorage.getItem('email'),
         }
-        console.log(newUser.email);
+        // console.log(newUser.email);
 
         axios.post('http://localhost:4000/getuser',newUser).then(res => {
             // this.setState({user: res.data})
             this.setState({name: res.data.name})
             this.setState({contact: res.data.contact})
             this.setState({bio: res.data.bio})
-            // this.setState({skill: res.data.skill})
+            this.setState({skill: res.data.skill})
+            this.setState({education: res.data.education})
             this.setState({password: res.data.password})
         })
+        // console.log("skill: "+ newUser.skill);
     }
 
     onSubmit(e) {
@@ -49,12 +97,15 @@ class Profile extends Component {
             contact: this.state.contact,
             bio: this.state.bio,
             skill: this.state.skill,
+            education: this.state.education,
             password: this.state.password,
             email: this.state.email,
         }
+        // console.log("newuser: "+newUser.skill);
+
         axios.post('http://localhost:4000/updateuser', newUser)
             .then(res => {
-                console.log("update: "+res.data.name);
+                console.log("update: "+res.data.skill);
                 alert("User Updated")
                 
                 this.setState({
@@ -62,13 +113,13 @@ class Profile extends Component {
                     password: this.state.password,
                     contact: this.state.contact,
                     bio: this.state.bio,
-                    // skill: this.state.skill,
+                    skill: this.state.skill,
                 });
             })
     }
 
     render() {
-        // console.log("USER: " + this.state.user);
+        // console.log("USER: " + this.state.name);
         if (this.state.usertype === "applicant") {
             return (
                 <div className="container">
@@ -102,6 +153,39 @@ class Profile extends Component {
                                 onChange={event => this.setState({password: event.target.value})}
                                 />
                         </div>
+                        
+                        <div className="form-group">
+                            <label>Skill: </label>
+                            <br/>
+                            {this.state.skill.map((skill, index) => (
+                            <span key={index}>
+                                <input type="text" onChange={this.saveSkill(index)} value={skill} />
+                                <button onClick={this.deleteSkill(index)}>x</button>
+                            </span>
+                            ))}
+                            <br/>
+                            <button onClick={this.addSkill}>Add Skill</button>
+                        </div>
+
+                        <label>Education:</label>
+                        <div>
+                        {
+                            this.state.education.map((education, index) => {
+                                return (
+                                    <div className="box" key={index}>
+                                        <input name="institute" placeholder="institute" value={education.institute} onChange={this.saveEducation.bind(this, index)} />
+                                        <input name="startyear" placeholder="startyear" value={education.startyear} onChange={this.saveEducation.bind(this, index)} />
+                                        <input name="endyear" placeholder="endyear" value={education.endyear} onChange={this.saveEducation.bind(this, index)} />
+                                        <div className="btn-box">
+                                            {this.state.education.length !== 1 && <input type='button' value='x' onClick={this.deleteEducation.bind(this, index)} />}
+                                            {this.state.education.length - 1 === index && <input type='button' value='add' onClick={this.addEducation.bind(this)}/>}
+                                        </div>
+                                    </div>
+                                );
+                            })
+                        }
+                        </div>
+
                         <div className="form-group">
                         <input type="submit" value="Save Changes" className="btn btn-primary"/>
                         </div>
