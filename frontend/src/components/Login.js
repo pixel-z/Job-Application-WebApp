@@ -60,7 +60,7 @@ export default class Login extends Component {
                 localStorage.setItem("email",newUser.email);
                 localStorage.setItem("usertype",newUser.usertype);
 
-                console.log("localstorage email: " + localStorage.getItem("email") + "localstorage usertype: " + localStorage.getItem("usertype"));
+                // console.log("localstorage email: " + localStorage.getItem("email") + "localstorage usertype: " + localStorage.getItem("usertype"));
                 
                 // window.location.href = '/users';
 

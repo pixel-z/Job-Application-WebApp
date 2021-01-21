@@ -108,6 +108,59 @@ app.post('/login', (req, res) => {
     });
 })
 
+// sending user information to frontend
+app.post('/getuser', (req, res) => {
+    User.findOne({ email: req.body.email }).then(user => {
+        if(!user)
+        {
+            return res.status(404).json({
+				error: "User not found",
+			});
+        }
+        else {
+            // console.log(user);
+            res.status(200).json({
+                name: user.name,
+                contact: user.contact,
+                bio: user.bio,
+                // skill: user.skill,
+                password: user.password,
+            });
+        }
+    })
+})
+
+// updating user info
+app.post('/updateuser', (req, res) => {
+    
+    User.findOne({ email: req.body.email }).then(user => {
+        if(!user)
+        {
+            return res.status(404).json({
+				error: "User not found",
+			});
+        }
+        else {
+            User.updateOne(
+                {name: req.body.name, contact: req.body.contact, bio: req.body.bio, password: req.body.password},
+                function(err, user) {
+                    if(err) return;
+                    else {
+                        console.log("user updated");
+                    }
+                }
+            );
+            res.status(200).json({
+                name: user.name,
+                contact: user.contact,
+                bio: user.bio,
+                skill: user.skill,
+                password: user.password,
+            });
+        }
+    })
+})
+
 app.listen(PORT, () => {
     console.log(`Server running on port: ${PORT}`);
 });

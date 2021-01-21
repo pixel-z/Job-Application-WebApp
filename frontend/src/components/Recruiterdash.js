@@ -20,7 +20,7 @@ class Recruiterdash extends Component {
     }
 
     componentDidMount() {
-        console.log("localstorage email: " + localStorage.getItem("email"));
+        // console.log("localstorage email: " + localStorage.getItem("email"));
         if (localStorage.getItem("usertype") === "applicant" && localStorage.getItem("email")) 
             this.props.history.push("/applicantdash");
         else if (localStorage.getItem("usertype") === "recruiter" && localStorage.getItem("email")) 
