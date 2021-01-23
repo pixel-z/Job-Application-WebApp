@@ -85,7 +85,6 @@ class Profile extends Component {
             this.setState({education: res.data.education})
             this.setState({password: res.data.password})
         })
-        // console.log("skill: "+ newUser.skill);
     }
 
     onSubmit(e) {
@@ -105,16 +104,18 @@ class Profile extends Component {
 
         axios.post('http://localhost:4000/updateuser', newUser)
             .then(res => {
-                console.log("update: "+res.data.skill);
                 alert("User Updated")
                 
-                this.setState({
-                    name: this.state.name,
-                    password: this.state.password,
-                    contact: this.state.contact,
-                    bio: this.state.bio,
-                    skill: this.state.skill,
-                });
+                // this.setState({
+                //     name: this.state.name,
+                //     password: this.state.password,
+                //     contact: this.state.contact,
+                //     bio: this.state.bio,
+                //     skill: this.state.skill,
+                // });
+            })
+            .catch(err => {
+                alert("Invalid inputs");
             })
     }
 

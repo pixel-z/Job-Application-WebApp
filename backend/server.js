@@ -16,7 +16,7 @@ app.use(express.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
 // Connection to MongoDB
-mongoose.connect('mongodb://127.0.0.1:27017/' + DB, { useNewUrlParser: true , useUnifiedTopology: true });
+mongoose.connect('mongodb://127.0.0.1:27017/' + DB, { useNewUrlParser: true , useUnifiedTopology: true, useFindAndModify: false });
 const connection = mongoose.connection;
 connection.once('open', function() { 
     console.log("MongoDB database connection established successfully !");
@@ -133,33 +133,57 @@ app.post('/getuser', (req, res) => {
 // updating user info
 app.post('/updateuser', (req, res) => {
     
-    User.findOne({ email: req.body.email }).then(user => {
-        if(!user)
-        {
-            return res.status(404).json({
-				error: "User not found",
-			});
-        }
-        else {
-            user.updateOne(
-                {name: req.body.name, contact: req.body.contact, bio: req.body.bio, password: req.body.password, skill: req.body.skill, education: req.body.education},
-                function(err, user) {
-                    if(err) return;
-                    else {
-                        console.log("user updated");
-                    }
-                }
-            );
-            res.status(200).json({
-                name: user.name,
-                contact: user.contact,
-                bio: user.bio,
-                skill: user.skill,
-                education: user.education,
-                password: user.password,
-            });
-        }
-    })
+    // User.findOne({ email: req.body.email }).then(user => {
+    //     if(!user)
+    //     {
+    //         return res.status(404).json({
+	// 			error: "User not found",
+	// 		});
+    //     }
+    //     else {
+    //         user.updateOne(
+    //             {name: req.body.name, contact: req.body.contact, bio: req.body.bio, password: req.body.password, skill: req.body.skill, education: req.body.education},
+    //             {runValidators: true},
+    //             function(err, user) {
+    //                 if(err) return;
+    //                 else {
+    //                     console.log("user updated");
+    //                 }
+    //             }
+    //         );
+    //         res.status(200).json({
+    //             name: user.name,
+    //             contact: user.contact,
+    //             bio: user.bio,
+    //             skill: user.skill,
+    //             education: user.education,
+    //             password: user.password,
+    //         });
+    //     }
+    // })
+
+    var update = {   
+        name: req.body.name,
+        password: req.body.password,
+        skill: req.body.skill,
+        education: req.body.education,
+        contact: req.body.contact,
+        bio: req.body.bio
+    }
+    
+    if(req.body.bio)
+    update.bio = req.body.bio;
+    else
+        update.bio = '';
+
+    User.findOneAndUpdate({email: req.body.email},update,{runValidators: true})
+        .then(user => {
+            return res.status(200).json(user);
+        })
+        .catch(err => {
+            console.log(err);
+            res.status(400).send(err);
+        })
 })
 
 app.listen(PORT, () => {

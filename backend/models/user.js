@@ -43,9 +43,11 @@ const UserSchema = new Schema({
 				required: false,
 				validate: {
 					validator: function (v) {
-					  yearRegex = /^[0-9]{4}$/;
-					  const currYear = new Date().getFullYear();
-					  return v <= currYear && yearRegex.test(v);
+						if (v === undefined || v === null)
+							return true;
+					  	yearRegex = /^[0-9]{4}$/;
+					  	const currYear = new Date().getFullYear();
+					  	return v <= currYear && yearRegex.test(v);
 					},
 				message: "End Year invalid",
 				},
@@ -78,8 +80,10 @@ const UserSchema = new Schema({
 		required: false,
 		validate: {
 			validator: function (v) {
+				if (v === undefined || v === null)
+					return true;
                 numRegex = /^[0-9]{10}$/;
-				return numRegex.test(v);
+				return numRegex.test(v) || v.length == 0;
 			},
 			message: "Invalid Contact"
 		},
