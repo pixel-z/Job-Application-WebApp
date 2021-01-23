@@ -22,7 +22,54 @@ const JobSchema = new Schema({
 	deadline: {
 		type: Date,
 		required: true
-	}
+	},
+	no_applications: {
+		type: Number,
+		min: 0,
+		max: 20,
+		required: true
+	},
+	no_positions: {
+		type: Number,
+		min: 0,
+		max: 20,
+		required: true
+	},
+	skill: {
+		type: [],
+		required: false
+	},
+	jobtype: {
+		type: String,
+		enum: ['full-time','part-time','work-from-home'],
+		required: true
+	},
+	duration: {
+		type: Number,
+		min: 0,
+		max: 6,
+		required: true,
+	},
+	salary: {
+		type: Number,
+		min: 0,
+		required: true,
+	},
+	rating: {
+		type: Number,
+		min: 0,
+		max: 5
+	},
+	applicant: [
+		{
+			email: {
+				type: String,
+			},
+			sop: {
+				type: String
+			}
+		}
+	]
 });
 
 module.exports = Job = mongoose.model("job", JobSchema);
