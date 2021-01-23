@@ -9,6 +9,7 @@ const DB = 'db'
 
 // Loading user model
 const User = require('./models/user');
+const Job = require('./models/jobs');
 
 app.use(cors());
 app.use(bodyParser.json());
@@ -185,6 +186,58 @@ app.post('/updateuser', (req, res) => {
             res.status(400).send(err);
         })
 })
+
+// creating job listing as a recruiter
+app.post("/createjob", (req, res) => {
+
+    User.findOne({ email: req.body.email }).then(user => {
+        if(!user)
+        {
+            return res.status(404).json({
+				error: "User not found",
+			});
+        }
+        else {
+            
+            const newJob = new Job({
+                title: req.body.title,
+                name: user.name,
+                email: req.body.email,
+                dateofposting: req.body.dateofposting,
+                deadline: req.body.deadline,
+                skill: req.body.skill,
+                jobtype: req.body.jobtype,
+                duration: req.body.duration,
+                salary: req.body.salary,
+                no_applications: 0,
+                no_positions: 0,
+            });
+
+            // console.log("deadline:: "+newJob)
+        
+            newJob.save()
+                .then(job => {
+                    res.status(200).json(job);
+                })
+                .catch(err => {
+                    res.status(400).json(err);
+                    console.log(err);
+                });
+        }
+    })
+    
+});
+
+// list all the jobs
+app.get("/jobs", function(req, res) {
+    Job.find(function(err, job) {
+		if (err) {
+			console.log(err);
+		} else {
+			res.json(job);
+		}
+	})
+});
 
 app.listen(PORT, () => {
     console.log(`Server running on port: ${PORT}`);
