@@ -20,6 +20,8 @@ import ArrowUpwardIcon from '@material-ui/icons/ArrowUpward';
 import ArrowDownwardIcon from '@material-ui/icons/ArrowDownward';
 import "bootstrap/dist/css/bootstrap.min.css"
 import { Link } from 'react-router-dom';
+import MenuItem from '@material-ui/core/MenuItem';
+import Select from '@material-ui/core/Select';
 
 
 class Applicationdash extends Component {
@@ -28,10 +30,15 @@ class Applicationdash extends Component {
         super(props);
         this.state = {
             jobs: [],
-            sortedjobs: [], 
+            jobs2: [],
+            filteredDuration: [], 
+            filteredJobtype: [], 
+            filteredSalary: [], 
             sortDuration:true,
             sortSalary:true,
             sortRating:true,
+            min: '0',
+            max: '10000000000',
 
             Apply: {
                 backgroundColor: "#0080ff",
@@ -52,6 +59,12 @@ class Applicationdash extends Component {
         this.sortDuration = this.sortDuration.bind(this);
         this.sortSalary = this.sortSalary.bind(this);
         this.sortRating = this.sortRating.bind(this);
+
+        this.filterDuration = this.filterDuration.bind(this);
+        this.filterJobtype = this.filterJobtype.bind(this);
+        this.filterSalary = this.filterSalary.bind(this);
+        this.filterCombined = this.filterCombined.bind(this);
+
         this.logout = this.logout.bind(this);
     }
 
@@ -72,7 +85,7 @@ class Applicationdash extends Component {
 
         axios.get('http://localhost:4000/jobs')
         .then(response => {
-            this.setState({jobs: response.data, sortedjobs:response.data});
+            this.setState({jobs: response.data, jobs2: response.data, filteredDuration:response.data, filteredJobtype:response.data, filteredSalary:response.data});
         })
         .catch(function(error) {
             console.log(error);
@@ -131,6 +144,67 @@ class Applicationdash extends Component {
     ratingIcon(){
         if(this.state.sortRating) return(<ArrowDownwardIcon/>);
         else return(<ArrowUpwardIcon/>);
+    }
+
+    filterCombined(){
+        var arr = [this.state.filteredDuration];
+        var final = arr.shift().filter(function(v){
+            return arr.every(function(a){
+                return a.indexOf(v) !== -1;
+            });
+        });
+        this.setState({jobs: final});
+    }
+
+    filterDuration(e){
+        var array = this.state.jobs2;
+        const value = e.target.value;
+
+        var filtered = [];
+        for(var i=0; i<array.length; i++){
+            // console.log(Number(array[i].duration))
+
+            if(Number(array[i].duration) < Number(value))
+                filtered.push(array[i]);
+        }
+        this.state.filteredDuration = filtered;
+        // this.filterCombined();
+        this.setState({jobs: this.state.filteredDuration});
+    }
+    filterJobtype(e){
+        var array = this.state.jobs2;
+        const value = e.target.value;
+
+        var filtered = [];
+        for(var i=0; i<array.length; i++){
+            if(array[i].jobtype === value)
+                filtered.push(array[i]);
+        }
+
+        if (value ==="all")
+            this.state.filteredJobtype = array;
+        else    
+            this.state.filteredJobtype = filtered;
+
+        this.setState({jobs: this.state.filteredJobtype});
+    }
+    filterSalary(e){
+        var array = this.state.jobs2;
+
+        var filtered = [];
+        if (this.state.min.length === 0) 
+            this.state.min = 0;
+        if (this.state.max.length === 0) 
+            this.state.max = 10000000000;
+        
+        for(var i=0; i<array.length; i++) {
+            if(Number(array[i].salary) >= Number(this.state.min) && Number(array[i].salary) <= Number(this.state.max))
+                filtered.push(array[i]);
+        }
+
+        this.state.filteredSalary = filtered;
+
+        this.setState({jobs: this.state.filteredSalary});
     }
 
     buttonDisplay(job){
@@ -194,29 +268,61 @@ class Applicationdash extends Component {
                 Welcome {localStorage.getItem('email')}
 
                 <Grid container>
-                    <Grid item xs={12} md={3} lg={3}>
+                    <Grid item xs={12} md={3} lg={4}>
+                        <List component="nav" aria-label="mailbox folders">
+                            <ListItem button>
+                                <form noValidate autoComplete="off">
+                                    <label>Salary</label>
+                                    <TextField id="standard-basic" label="Enter Min" fullWidth={true} onChange={event => this.setState({ min: event.target.value})}/>
+                                    <TextField id="standard-basic" label="Enter Max" fullWidth={true} onChange={event => this.setState({ max: event.target.value})}/>
+                                    <Button value="submit" onClick={this.filterSalary}>Search</Button>
+                                </form>                                                                
+                            </ListItem>
+                        </List>
+                    </Grid>
+                    <Grid item xs={12} md={3} lg={4}>
                         <List component="nav" aria-label="mailbox folders">
 
                             <ListItem button>
                                 <form noValidate autoComplete="off">
-                                    <label>Salary</label>
-                                    <TextField id="standard-basic" label="Enter Min" fullWidth={true} />
-                                    <TextField id="standard-basic" label="Enter Max" fullWidth={true}/>
+                                    <label>Duration</label>
                                 </form>                                                                
                             </ListItem>
                             <Divider />
                             <ListItem button divider>
-                                <Autocomplete
-                                    id="combo-box-demo"
-                                    options={this.state.jobs}
-                                    getOptionLabel={(option) => option.name}
-                                    style={{ width: 300 }}
-                                    renderInput={(params) => <TextField {...params} label="Select Names" variant="outlined" />}
-                                />
+                                <Select id="duration" onClick={this.filterDuration} defaultValue={7}>
+                                    <MenuItem value="7">7</MenuItem>
+                                    <MenuItem value="6">6</MenuItem>
+                                    <MenuItem value="5">5</MenuItem>
+                                    <MenuItem value="4">4</MenuItem>
+                                    <MenuItem value="3">3</MenuItem>
+                                    <MenuItem value="2">2</MenuItem>
+                                    <MenuItem value="1">1</MenuItem>
+                                </Select>
+                            </ListItem>
+                        </List>
+                    </Grid>
+                    <Grid item xs={12} md={3} lg={4}>
+                        <List component="nav" aria-label="mailbox folders">
+
+                            <ListItem button>
+                                <form noValidate autoComplete="off">
+                                    <label>Jobtype</label>
+                                </form>                                                                
+                            </ListItem>
+                            <Divider />
+                            <ListItem button divider>
+                                <Select id="jobtype" onClick={this.filterJobtype} defaultValue={"all"}>
+                                    <MenuItem value="all">All</MenuItem>
+                                    <MenuItem value="full-time">Full-Time</MenuItem>
+                                    <MenuItem value="part-time">Part-Time</MenuItem>
+                                    <MenuItem value="work-from-home">Work-from-Home</MenuItem>
+                                </Select>
                             </ListItem>
                         </List>
                     </Grid>
                 </Grid>
+
                 <Grid container>
                     <Grid item xs={12} md={9} lg={12}>
                     <List component="nav" aria-label="mailbox folders">
