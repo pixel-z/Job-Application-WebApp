@@ -29,7 +29,9 @@ class Applicationdash extends Component {
         this.state = {
             jobs: [],
             sortedjobs: [], 
-            sortName:true,
+            sortDuration:true,
+            sortSalary:true,
+            sortRating:true,
 
             Apply: {
                 backgroundColor: "#0080ff",
@@ -44,8 +46,12 @@ class Applicationdash extends Component {
                 color: "white",
             },
         }
-        this.renderIcon = this.renderIcon.bind(this);
-        this.sortChange = this.sortChange.bind(this);
+        this.durationIcon = this.durationIcon.bind(this);
+        this.salaryIcon = this.salaryIcon.bind(this);
+        this.ratingIcon = this.ratingIcon.bind(this);
+        this.sortDuration = this.sortDuration.bind(this);
+        this.sortSalary = this.sortSalary.bind(this);
+        this.sortRating = this.sortRating.bind(this);
         this.logout = this.logout.bind(this);
     }
 
@@ -72,24 +78,61 @@ class Applicationdash extends Component {
             console.log(error);
         })
     }
-    sortChange(){
+    sortDuration(){
         var array = this.state.jobs;
-        var flag = this.state.sortName;
+        var flag = this.state.sortDuration;
         array.sort(function(a, b) {
-            if(a.date != undefined && b.date != undefined)
-                return (1 - flag*2) * (new Date(a.date) - new Date(b.date));
+            if(a.duration != undefined && b.duration != undefined)
+                return (1 - flag*2) * (a.duration - b.duration);
             else
                 return 1;
         });
         this.setState({
             jobs:array,
-            sortName:!this.state.sortName,
+            sortDuration:!this.state.sortDuration,
         })
     }
-    renderIcon(){
-        if(this.state.sortName) return(<ArrowDownwardIcon/>);
+    sortSalary(){
+        var array = this.state.jobs;
+        var flag = this.state.sortSalary;
+        array.sort(function(a, b) {
+            if(a.salary != undefined && b.salary != undefined)
+                return (1 - flag*2) * (a.salary - b.salary);
+            else
+                return 1;
+        });
+        this.setState({
+            jobs:array,
+            sortSalary:!this.state.sortSalary,
+        })
+    }
+    sortRating(){
+        var array = this.state.jobs;
+        var flag = this.state.sortRating;
+        array.sort(function(a, b) {
+            if(a.rating != undefined && b.rating != undefined)
+                return (1 - flag*2) * (a.rating - b.rating);
+            else
+                return 1;
+        });
+        this.setState({
+            jobs:array,
+            sortRating:!this.state.sortRating,
+        })
+    }
+    salaryIcon(){
+        if(this.state.sortSalary) return(<ArrowDownwardIcon/>);
         else return(<ArrowUpwardIcon/>);
     }
+    durationIcon(){
+        if(this.state.sortDuration) return(<ArrowDownwardIcon/>);
+        else return(<ArrowUpwardIcon/>);
+    }
+    ratingIcon(){
+        if(this.state.sortRating) return(<ArrowDownwardIcon/>);
+        else return(<ArrowUpwardIcon/>);
+    }
+
     buttonDisplay(job){
         var flag=0;
 
@@ -201,10 +244,10 @@ class Applicationdash extends Component {
                                             <TableCell>Recruiter Name</TableCell>
                                             <TableCell>Recruiter Email</TableCell>
                                             <TableCell>Job Type</TableCell>
-                                            <TableCell>Duration</TableCell>
-                                            <TableCell>Salary</TableCell>
-                                            <TableCell>Rating</TableCell>
-                                            <TableCell> <Button onClick={this.sortChange}>{this.renderIcon()}</Button>Deadline</TableCell>
+                                            <TableCell><Button onClick={this.sortDuration}>{this.durationIcon()}</Button>Duration</TableCell>
+                                            <TableCell><Button onClick={this.sortSalary}>{this.salaryIcon()}</Button>Salary</TableCell>
+                                            <TableCell><Button onClick={this.sortRating}>{this.ratingIcon()}</Button>Rating</TableCell>
+                                            <TableCell>Deadline</TableCell>
                                     </TableRow>
                                 </TableHead>
                                 <TableBody>
