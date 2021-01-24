@@ -10,6 +10,7 @@ import Applicantdash from './components/Applicantdash'
 import Recruiterdash from './components/Recruiterdash'
 import UsersList from './components/UsersList'
 import Profile from './components/Profile'
+import Sop from './components/Sop'
 
 function App() {
   return (
@@ -25,6 +26,7 @@ function App() {
         <Route path="/recruiterdash" exact component={Recruiterdash}/>
         <Route path="/profile" exact component={Profile}/>
         <Route path="/users" exact component={UsersList}/>
+        <Route path="/sop" exact component={Sop}/>
       </div>
     </Router>
   );

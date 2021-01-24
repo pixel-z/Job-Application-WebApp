@@ -66,7 +66,17 @@ const JobSchema = new Schema({
 				type: String,
 			},
 			sop: {
-				type: String
+				type: String,
+				validate: {
+					validator: function (v) {
+						v = v.replace(/(^\s*)|(\s*$)/gi, "");
+						v = v.replace(/[ ]{2,}/gi, " ");
+						v = v.replace(/\n /, "\n");
+						var length = v.split(' ').length;
+						return length<=250;
+					},
+					message: "Max words 250 allowed for bio"
+				}
 			}
 		}
 	]

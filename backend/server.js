@@ -239,6 +239,34 @@ app.get("/jobs", function(req, res) {
 	})
 });
 
+app.post('/updatejob',(req, res) => {
+    const c = req.body.no_applications + 1;
+
+    var update = {
+        title: req.body.title,
+        name: req.body.name,
+        email: req.body.email,
+        dateofposting: req.body.dateofposting,
+        deadline: req.body.deadline,
+        skill: req.body.skill,
+        jobtype: req.body.jobtype,
+        duration: req.body.duration,
+        salary: req.body.salary,
+        no_applications: c,
+        no_positions: req.body.no_positions,
+        applicant: req.body.applicant,
+    }
+    Job.findOneAndUpdate({_id: req.body.id},update,{runValidators: true})
+        .then(job => {
+            // console.log(job)
+            return res.status(200).json(job);
+        })
+        .catch(err => {
+            console.log(err);
+            res.status(400).send(err);
+        })
+});
+
 app.listen(PORT, () => {
     console.log(`Server running on port: ${PORT}`);
 });

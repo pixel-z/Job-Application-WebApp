@@ -87,6 +87,11 @@ const UserSchema = new Schema({
 			},
 			message: "Invalid Contact"
 		},
+	},
+	// an applicant can have only 10 open applications
+	open_applications: {
+		type: Number,
+		max: 10,
 	}
 
 });
