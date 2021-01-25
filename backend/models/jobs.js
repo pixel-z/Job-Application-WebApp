@@ -23,17 +23,21 @@ const JobSchema = new Schema({
 		type: Date,
 		required: true
 	},
+	max_applications: {
+		type: Number,
+		required: true
+	},
+	max_positions: {
+		type: Number,
+		required: true
+	},
 	no_applications: {
 		type: Number,
-		min: 0,
-		max: 20,
-		required: true
+		required: false,
 	},
 	no_positions: {
 		type: Number,
-		min: 0,
-		max: 20,
-		required: true
+		required: false
 	},
 	skill: {
 		type: [],

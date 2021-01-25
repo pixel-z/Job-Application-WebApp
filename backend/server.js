@@ -209,6 +209,8 @@ app.post("/createjob", (req, res) => {
                 jobtype: req.body.jobtype,
                 duration: req.body.duration,
                 salary: req.body.salary,
+                max_applications: req.body.max_applications,
+                max_positions: req.body.max_positions,
                 no_applications: 0,
                 no_positions: 0,
             });
@@ -252,6 +254,8 @@ app.post('/updatejob',(req, res) => {
         jobtype: req.body.jobtype,
         duration: req.body.duration,
         salary: req.body.salary,
+        max_applications: req.body.max_applications,
+        max_positions: req.body.max_positions,
         no_applications: c,
         no_positions: req.body.no_positions,
         applicant: req.body.applicant,

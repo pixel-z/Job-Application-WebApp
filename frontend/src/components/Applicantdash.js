@@ -236,7 +236,7 @@ class Applicationdash extends Component {
 
         if(flag==1)
             return (<TableCell><button style={this.state.Applied}> Applied </button></TableCell>)
-        else if (job.no_applications >= 20) 
+        else if (job.no_applications >= job.max_applications) 
             return (<TableCell><button style={this.state.Full}> Full </button></TableCell>)
         else
             return (<TableCell><button style={this.state.Apply} onClick={() => this.onSubmit(job)}> Apply </button></TableCell>)

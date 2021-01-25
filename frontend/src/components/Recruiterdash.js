@@ -40,8 +40,10 @@ class Recruiterdash extends Component {
             deadline: new Date(),
             skill: [],
             jobtype: 'full-time',
-            duration: '',
+            duration: 0,
             salary: '',
+            max_applications: '',
+            max_positions: '',
             applicant: [{email: '',sop: ''}],
         };
         
@@ -137,6 +139,8 @@ class Recruiterdash extends Component {
             jobtype: this.state.jobtype,
             duration: this.state.duration,
             salary: this.state.salary,
+            max_applications: this.state.max_applications,
+            max_positions: this.state.max_positions,
         };
 
         axios.post('http://localhost:4000/createjob', newJob)
@@ -302,6 +306,22 @@ class Recruiterdash extends Component {
                                className="form-control" 
                                value={this.state.salary}
                                onChange={event => this.setState({salary: event.target.value})}
+                               />  
+                    </div>
+                    <div className="form-group">
+                        <label>Max Applications: </label>
+                        <input type="number" 
+                               className="form-control" 
+                               value={this.state.max_applications}
+                               onChange={event => this.setState({max_applications: event.target.value})}
+                               />  
+                    </div>
+                    <div className="form-group">
+                        <label>Max Positions: </label>
+                        <input type="number" 
+                               className="form-control" 
+                               value={this.state.max_positions}
+                               onChange={event => this.setState({max_positions: event.target.value})}
                                />  
                     </div>
                     <div className="form-group">
