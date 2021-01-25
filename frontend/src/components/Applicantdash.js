@@ -147,7 +147,7 @@ class Applicationdash extends Component {
     }
 
     filterCombined(){
-        var arr = [this.state.filteredDuration];
+        var arr = [this.state.filteredDuration, this.state.filteredJobtype, this.state.filteredSalary];
         var final = arr.shift().filter(function(v){
             return arr.every(function(a){
                 return a.indexOf(v) !== -1;
@@ -168,8 +168,8 @@ class Applicationdash extends Component {
                 filtered.push(array[i]);
         }
         this.state.filteredDuration = filtered;
-        // this.filterCombined();
-        this.setState({jobs: this.state.filteredDuration});
+        this.filterCombined();
+        // this.setState({jobs: this.state.filteredDuration});
     }
     filterJobtype(e){
         var array = this.state.jobs2;
@@ -186,7 +186,8 @@ class Applicationdash extends Component {
         else    
             this.state.filteredJobtype = filtered;
 
-        this.setState({jobs: this.state.filteredJobtype});
+        // this.setState({jobs: this.state.filteredJobtype});
+        this.filterCombined();
     }
     filterSalary(e){
         var array = this.state.jobs2;
@@ -204,7 +205,8 @@ class Applicationdash extends Component {
 
         this.state.filteredSalary = filtered;
 
-        this.setState({jobs: this.state.filteredSalary});
+        // this.setState({jobs: this.state.filteredSalary});
+        this.filterCombined();
     }
 
     buttonDisplay(job){
