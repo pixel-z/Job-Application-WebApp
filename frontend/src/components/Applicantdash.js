@@ -22,7 +22,7 @@ import "bootstrap/dist/css/bootstrap.min.css"
 import { Link } from 'react-router-dom';
 import MenuItem from '@material-ui/core/MenuItem';
 import Select from '@material-ui/core/Select';
-
+import Fuse from 'fuse.js';
 
 class Applicationdash extends Component {
     
@@ -39,6 +39,7 @@ class Applicationdash extends Component {
             sortRating:true,
             min: '0',
             max: '10000000000',
+            searchTitle: '',
 
             Apply: {
                 backgroundColor: "#0080ff",
@@ -64,6 +65,8 @@ class Applicationdash extends Component {
         this.filterJobtype = this.filterJobtype.bind(this);
         this.filterSalary = this.filterSalary.bind(this);
         this.filterCombined = this.filterCombined.bind(this);
+
+        this.fuzzySearch = this.fuzzySearch.bind(this);
 
         this.logout = this.logout.bind(this);
     }
@@ -209,6 +212,18 @@ class Applicationdash extends Component {
         this.filterCombined();
     }
 
+    fuzzySearch(e) {
+        const fuse = new Fuse(this.state.jobs2, {
+            keys: ['title'],
+            includeScore: true
+        })
+        // this.setState({searchTitle: e.target.value});
+        this.state.searchTitle = e.target.value;
+        const res = fuse.search(this.state.searchTitle);
+        const ans = this.state.searchTitle ? res.map(result => result.item) : this.state.jobs2;
+        this.setState({jobs: ans});
+    }
+
     buttonDisplay(job){
         var flag=0;
 
@@ -277,7 +292,7 @@ class Applicationdash extends Component {
                                     <label>Salary</label>
                                     <TextField id="standard-basic" label="Enter Min" fullWidth={true} onChange={event => this.setState({ min: event.target.value})}/>
                                     <TextField id="standard-basic" label="Enter Max" fullWidth={true} onChange={event => this.setState({ max: event.target.value})}/>
-                                    <Button value="submit" onClick={this.filterSalary}>Search</Button>
+                                    <Button value="submit" onClick={this.filterSalary}>Submit</Button>
                                 </form>                                                                
                             </ListItem>
                         </List>
@@ -327,7 +342,7 @@ class Applicationdash extends Component {
 
                 <Grid container>
                     <Grid item xs={12} md={9} lg={12}>
-                    <List component="nav" aria-label="mailbox folders">
+                    <List component="nav" aria-label="mailbox folders" onChange={this.fuzzySearch}>
                         <TextField 
                         id="standard-basic" 
                         label="Search" 
