@@ -68,6 +68,7 @@ app.post("/register", [
                 education: req.body.education,
                 contact: req.body.contact,
                 bio: req.body.bio,
+                open_applications: 0,
             });
         
             newUser.save()
@@ -126,6 +127,7 @@ app.post('/getuser', (req, res) => {
                 skill: user.skill,
                 education: user.education,
                 password: user.password,
+                open_applications: user.open_applications,
             });
         }
     })
@@ -173,7 +175,7 @@ app.post('/updateuser', (req, res) => {
     }
     
     if(req.body.bio)
-    update.bio = req.body.bio;
+        update.bio = req.body.bio;
     else
         update.bio = '';
 
@@ -270,6 +272,20 @@ app.post('/updatejob',(req, res) => {
             res.status(400).send(err);
         })
 });
+
+// updates open_applications in user schema
+app.post('/updateOpenApp', (req, res) => {
+    var update = {open_applications: req.body.open_applications}
+
+    User.findOneAndUpdate({email: req.body.email},update,{runValidators: true})
+        .then(user => {
+            return res.status(200).json(user);
+        })
+        .catch(err => {
+            console.log(err);
+            res.status(400).send(err);
+        })
+})
 
 app.listen(PORT, () => {
     console.log(`Server running on port: ${PORT}`);

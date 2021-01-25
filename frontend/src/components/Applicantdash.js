@@ -40,6 +40,7 @@ class Applicationdash extends Component {
             min: '0',
             max: '10000000000',
             searchTitle: '',
+            open_applications: 0,
 
             Apply: {
                 backgroundColor: "#0080ff",
@@ -242,7 +243,7 @@ class Applicationdash extends Component {
             return (<TableCell><button style={this.state.Apply} onClick={() => this.onSubmit(job)}> Apply </button></TableCell>)
     }
 
-    onSubmit(job) {
+    async onSubmit(job) {
         var email = localStorage.getItem("email");
         var date = new Date().toISOString();
         var flag = 0
@@ -254,7 +255,16 @@ class Applicationdash extends Component {
             }
         }
 
-        if (date>job.deadline)
+        const newUser = {email: localStorage.getItem('email')}
+        await axios.post('http://localhost:4000/getuser', newUser).then(res => {
+            this.state.open_applications = Number(res.data.open_applications);
+            console.log(this.state.open_applications + " " + res.data.open_applications);
+        })
+
+        console.log(this.state.open_applications)
+        if (this.state.open_applications>=10)
+            alert("Max 10 open applications allowed for an applicant")
+        else if (date>job.deadline)
             alert("Deadline already passed")
         else if (flag==1)
             alert("Already applied for this job")

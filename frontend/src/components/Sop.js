@@ -22,6 +22,7 @@ export default class Sop extends Component {
             max_positions: 0,
             no_applications: 0,
             no_positions: 0,
+            open_applications: 0,
             temp: '',  // for sop
             applicant: [{email:'', sop:''}]
         }
@@ -62,7 +63,7 @@ export default class Sop extends Component {
         this.setState({temp: e.target.value});
     }
 
-    onSubmit(e) {
+    async onSubmit(e) {
         e.preventDefault();
 
         const applicant = this.state.applicant;
@@ -87,16 +88,29 @@ export default class Sop extends Component {
             applicant: this.state.applicant,
         }
 
-        axios.post('http://localhost:4000/updatejob', newJob)
+        const getUser = {email: localStorage.getItem('email')}
+        await axios.post('http://localhost:4000/getuser', getUser).then(res => {
+            this.setState({open_applications: Number(res.data.open_applications) + 1});
+            // console.log("o0000: "+this.state.open_applications)
+        })
+
+        await axios.post('http://localhost:4000/updatejob', newJob)
             .then(res => {
+                // console.log("opennnn: "+this.state.open_applications)
+
+                const newUser = {email: localStorage.getItem('email'), open_applications: this.state.open_applications}
+                axios.post('http://localhost:4000/updateOpenApp', newUser)
+                    .then(res => {
+                        console.log(res.data)
+                    })
+    
                 alert('SOP sent successfully')
-                this.props.history.push('/applicantdash')
+                this.props.history.push('/applicantdash')                
             })
             .catch((error) => {
                 console.log(error)
                 alert('Error (Max 250 words allowed)')
             });
-        
     }
 
     render() {
