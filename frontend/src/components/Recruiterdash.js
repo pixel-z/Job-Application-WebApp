@@ -179,6 +179,9 @@ class Recruiterdash extends Component {
                             <li className="navbar-item">
                                 <Link className="nav-link" to={{pathname: '/profile'}}>Profile</Link>
                             </li>
+                            <li className="navbar-item">
+                                <Link className="nav-link" to={{pathname: '/employees'}}>Employees</Link>
+                            </li>
                         </ul>
                     </div>
                 </nav>    
