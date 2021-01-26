@@ -81,6 +81,13 @@ const JobSchema = new Schema({
 					},
 					message: "Max words 250 allowed for bio"
 				}
+			},
+			dateOfApplication: {
+				type: Date,
+			},
+			status: {
+				type: String,
+				enum: ['accepted', 'rejected', 'pending']
 			}
 		}
 	]

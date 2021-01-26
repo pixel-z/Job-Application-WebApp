@@ -11,6 +11,8 @@ import Recruiterdash from './components/Recruiterdash'
 import UsersList from './components/UsersList'
 import Profile from './components/Profile'
 import Sop from './components/Sop'
+import JobView from './components/JobView'
+import ProfileView from './components/ProfileView'
 
 function App() {
   return (
@@ -27,6 +29,8 @@ function App() {
         <Route path="/profile" exact component={Profile}/>
         <Route path="/users" exact component={UsersList}/>
         <Route path="/sop" exact component={Sop}/>
+        <Route path="/jobview" exact component={JobView}/>
+        <Route path="/jobview/profile" exact component={ProfileView}/>
       </div>
     </Router>
   );

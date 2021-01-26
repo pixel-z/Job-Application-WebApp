@@ -287,6 +287,18 @@ app.post('/updateOpenApp', (req, res) => {
         })
 })
 
+// returns jobs posted by recruiter
+app.post("/recruiterJobs", function(req, res) {
+    Job.find({email: req.body.email},function(err, job) {
+		if (err) {
+			console.log(err);
+        } 
+        else {
+			res.json(job);
+		}
+	})
+});
+
 app.listen(PORT, () => {
     console.log(`Server running on port: ${PORT}`);
 });
