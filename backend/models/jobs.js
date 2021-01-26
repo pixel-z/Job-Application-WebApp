@@ -88,6 +88,9 @@ const JobSchema = new Schema({
 			status: {
 				type: String,
 				enum: ['accepted', 'rejected', 'pending', 'apply']
+			},
+			dateOfJoining: {
+				type: Date,
 			}
 		}
 	]

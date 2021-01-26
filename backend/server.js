@@ -273,6 +273,16 @@ app.post('/updatejob',(req, res) => {
         })
 });
 
+app.post('/deletejob', (req, res) => {
+    console.log(req.body.iidd);
+    Job.findOneAndDelete({_id:req.body.iidd})
+        .then(job => {
+            console.log('Deleted job');
+            res.send(':D')
+        })
+        .catch(err =>{console.log(err)})
+});
+
 // updates open_applications in user schema
 app.post('/updateOpenApp', (req, res) => {
     var update = {open_applications: req.body.open_applications}
@@ -298,6 +308,35 @@ app.post("/recruiterJobs", function(req, res) {
 		}
 	})
 });
+
+// changes job variables
+app.post('/changeJobStatus', (req, res) => {
+    var update = {
+        title: req.body.title,
+        name: req.body.name,
+        email: req.body.email,
+        dateofposting: req.body.dateofposting,
+        deadline: req.body.deadline,
+        skill: req.body.skill,
+        jobtype: req.body.jobtype,
+        duration: req.body.duration,
+        salary: req.body.salary,
+        max_applications: req.body.max_applications,
+        max_positions: req.body.max_positions,
+        no_applications: req.body.no_applications,
+        no_positions: req.body.no_positions,
+        applicant: req.body.applicant,
+    }
+    Job.findOneAndUpdate({_id: req.body.id},update,{runValidators: true})
+        .then(job => {
+            console.log(job)
+            return res.status(200).json(job);
+        })
+        .catch(err => {
+            console.log(err);
+            res.status(400).send(err);
+        })
+})
 
 app.listen(PORT, () => {
     console.log(`Server running on port: ${PORT}`);

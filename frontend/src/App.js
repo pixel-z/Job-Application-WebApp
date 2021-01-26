@@ -13,6 +13,7 @@ import Profile from './components/Profile'
 import Sop from './components/Sop'
 import JobView from './components/JobView'
 import ProfileView from './components/ProfileView'
+import JobEdit from './components/JobEdit'
 
 function App() {
   return (
@@ -31,6 +32,7 @@ function App() {
         <Route path="/sop" exact component={Sop}/>
         <Route path="/jobview" exact component={JobView}/>
         <Route path="/jobview/profile" exact component={ProfileView}/>
+        <Route path="/jobedit" exact component={JobEdit}/>
       </div>
     </Router>
   );

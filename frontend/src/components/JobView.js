@@ -51,12 +51,12 @@ export default class JobView extends Component {
             this.props.history.push("/login");
 
         axios.get('http://localhost:4000/user')
-             .then(response => {
-                 this.setState({users: response.data});
-             })
-             .catch(function(error) {
-                 console.log(error);
-             })
+            .then(response => {
+                this.setState({users: response.data});
+            })
+            .catch(function(error) {
+                console.log(error);
+            })
     }
     
     sortName(){
@@ -129,9 +129,89 @@ export default class JobView extends Component {
     }
 
     accept(applicant) {
+        var appl = this.state.applicants;
+        for (var i = 0; i < appl.length; i++)
+        {
+            if (appl[i].email === applicant.email)
+            {
+                appl[i].status = 'accepted';
+                appl[i].dateOfJoining = new Date().toISOString();
+            }
+        }
+        this.setState({applicants: appl});
 
+        const val = {
+            id: this.state.job._id,
+            email: this.state.job.email,
+            applicant: this.state.applicants,
+
+            title: this.state.job.title,
+            name: this.state.job.name,
+            dateofposting: this.state.job.dateofposting,
+            deadline: this.state.job.deadline,
+            skill: this.state.job.skill,
+            jobtype: this.state.job.jobtype,
+            duration: this.state.job.duration,
+            salary: this.state.job.salary,
+            max_applications: this.state.job.max_applications,
+            max_positions: this.state.job.max_positions,
+            no_applications: this.state.job.no_applications,
+            no_positions: this.state.job.no_positions,
+        }
+
+        axios.post('http://localhost:4000/changeJobStatus',val)
+            .then(res => {
+                alert("Accepted");
+                console.log(res.data)
+                this.setState({
+                    job: res.data,
+                })
+            })
+            .catch(err => {
+                console.error(err);
+                alert("Error");
+            })
+
+
+        // console.log(this.state.job.applicant)
     }
     reject(applicant) {
+        var appl = this.state.applicants;
+        for (var i = 0; i < appl.length; i++)
+        {
+            if (appl[i].email === applicant.email)
+                appl[i].status = 'rejected';
+        }
+        this.setState({applicants: appl});
+
+        const val = {
+            id: this.state.job._id,
+            email: this.state.job.email,
+            applicant: this.state.applicants,
+
+            title: this.state.job.title,
+            name: this.state.job.name,
+            dateofposting: this.state.job.dateofposting,
+            deadline: this.state.job.deadline,
+            skill: this.state.job.skill,
+            jobtype: this.state.job.jobtype,
+            duration: this.state.job.duration,
+            salary: this.state.job.salary,
+            max_applications: this.state.job.max_applications,
+            max_positions: this.state.job.max_positions,
+            no_applications: this.state.job.no_applications,
+            no_positions: this.state.job.no_positions,
+        }
+
+        axios.post('http://localhost:4000/changeJobStatus',val)
+            .then(res => {
+                alert("Rejected");
+                console.log(res.data)
+            })
+            .catch(err => {
+                console.error(err);
+                alert("Error");
+            })
 
     }
     profile(v, sop) {
@@ -161,6 +241,10 @@ export default class JobView extends Component {
             return (<div>{applicant.dateOfApplication}</div>);
         else if(c==5)
             return (<div>{applicant.status}</div>);
+        else if(c==6)
+            return (<button style={this.state.green} onClick={() => this.accept(applicant)}>Accept</button>)
+        else if(c==7)
+            return (<button style={this.state.red} onClick={() => this.reject(applicant)}>Reject</button>)
     }
             
     render() {
@@ -199,8 +283,8 @@ export default class JobView extends Component {
                                         <TableCell>{this.display(applicant,3)}</TableCell>
                                         <TableCell>{this.display(applicant,4)}</TableCell>
                                         <TableCell>{this.display(applicant,5)}</TableCell>
-                                        <TableCell><button style={this.state.green} onClick={() => this.accept(applicant)}>Accept</button></TableCell>
-                                        <TableCell><button style={this.state.red} onClick={() => this.reject(applicant)}>Reject</button></TableCell>
+                                        <TableCell>{this.display(applicant,6)}</TableCell>
+                                        <TableCell>{this.display(applicant,7)}</TableCell>
                                     </TableRow>
                             ))}
                             </TableBody>

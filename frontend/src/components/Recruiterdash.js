@@ -30,6 +30,7 @@ class Recruiterdash extends Component {
 
         this.state = {
             jobs: [],
+            users: [],
 
             title: '',
             name: '',
@@ -49,6 +50,7 @@ class Recruiterdash extends Component {
         this.editJob = this.editJob.bind(this);
         this.viewJob = this.viewJob.bind(this);
         this.deleteJob = this.deleteJob.bind(this);
+        this.handleChange = this.handleChange.bind(this);
         this.onSubmit = this.onSubmit.bind(this);
     }
 
@@ -75,6 +77,14 @@ class Recruiterdash extends Component {
             .catch(function(error) {
                 console.log(error);
             })
+
+        axios.get('http://localhost:4000/user')
+            .then(response => {
+                this.setState({users: response.data});
+            })
+            .catch(function(error) {
+                console.log(error);
+            })
     }
 
     viewJob(job) {
@@ -82,13 +92,23 @@ class Recruiterdash extends Component {
         this.props.history.push('/jobview')
     }
     editJob(job) {
+        localStorage.setItem('currjob',JSON.stringify(job));
         this.props.history.push({
             pathname:'/jobedit',
             state: job
         })
     }
     deleteJob(job) {
-
+        // open_applications in user
+        var newJob = {iidd:job._id}
+        console.log(job._id)
+        axios.post('http://localhost:4000/deletejob',newJob)
+            .then(res => {
+                alert('Job deleted successfully, Refresh page');
+            })
+            .catch(err => {
+                console.log(err)
+            });
     }
 
     saveSkill = i => e => {
@@ -139,6 +159,12 @@ class Recruiterdash extends Component {
             .catch((error) => {
                 alert("Invalid credentials "+error.message);
             });
+    }
+
+    handleChange(date) {
+        this.setState({
+            deadline: date
+        })
     }
 
     render() {
