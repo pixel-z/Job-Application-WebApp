@@ -15,6 +15,7 @@ import JobView from './components/JobView'
 import ProfileView from './components/ProfileView'
 import JobEdit from './components/JobEdit'
 import Employees from './components/Employees'
+import MyApp from './components/MyApp'
 
 function App() {
   return (
@@ -35,6 +36,7 @@ function App() {
         <Route path="/jobview/profile" exact component={ProfileView}/>
         <Route path="/jobedit" exact component={JobEdit}/>
         <Route path="/employees" exact component={Employees}/>
+        <Route path="/myapp" exact component={MyApp}/>
       </div>
     </Router>
   );
