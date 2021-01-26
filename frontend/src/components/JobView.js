@@ -176,6 +176,11 @@ export default class JobView extends Component {
         // console.log(this.state.job.applicant)
     }
     reject(applicant) {
+        if (applicant.status === 'accepted') {
+            alert("Already accepted");
+            return;
+        }
+
         var appl = this.state.applicants;
         for (var i = 0; i < appl.length; i++)
         {
@@ -225,6 +230,9 @@ export default class JobView extends Component {
     }
 
     display(applicant,c) {
+        if (applicant.status === 'rejected') {
+            return;
+        }
         var v=[];
         this.state.users.map((user) =>{
             if (applicant.email === user.email) {
