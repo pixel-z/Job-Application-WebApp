@@ -42,7 +42,7 @@ class Recruiterdash extends Component {
             salary: '',
             max_applications: '',
             max_positions: '',
-            applicant: [{email: '',sop: ''}],
+            applicant: [{email: '',sop: '',dateOfApplication: '', status: ''}],
         };
         
         this.logout = this.logout.bind(this);

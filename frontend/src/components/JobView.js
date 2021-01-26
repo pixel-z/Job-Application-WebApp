@@ -114,25 +114,18 @@ export default class JobView extends Component {
     sortDate(){
         var modifiedJob = this.state.job;
         var array = this.state.applicants;
-        for (var i = 0; i < array.length; i++) {
-            var User = this.state.users.find(user => user.email === array[i].email)
-            if(User) array[i].dateOfApplication = User.dateOfApplication;
-        }
-
         var flag = this.state.sortDate;
-        array.sort(function (a, b) {
+        array.sort(function(a, b) {
             if(a.dateOfApplication != undefined && b.dateOfApplication != undefined)
-                return (1 - flag * 2) * (new Date(a.dateOfApplication) - new Date(b.dateOfApplication));
+                return (1 - flag*2) * (new Date(a.dateOfApplication)- new Date(b.dateOfApplication));
             else
                 return 1;
         });
-
-        for (var i = 0; i < array.length; i++) delete array[i].dateOfApplication
         modifiedJob.applicant = array;
         this.setState({
-            job: modifiedJob,
-            sortDate:!this.state.sortDate
-        });
+            jobs:modifiedJob,
+            sortDate:!this.state.sortDate,
+        })
     }
 
     accept(applicant) {

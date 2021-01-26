@@ -24,7 +24,7 @@ export default class Sop extends Component {
             no_positions: 0,
             open_applications: 0,
             temp: '',  // for sop
-            applicant: [{email:'', sop:''}]
+            applicant: [{email:'', sop:'', dateOfApplication:'', status:''}]
         }
 
         this.onSubmit = this.onSubmit.bind(this);
@@ -67,7 +67,9 @@ export default class Sop extends Component {
         e.preventDefault();
 
         const applicant = this.state.applicant;
-        applicant.push({ email: localStorage.getItem('email'), sop: this.state.temp });
+        var date = new Date().toISOString();
+        // console.log(date);
+        applicant.push({ email: localStorage.getItem('email'), sop: this.state.temp, dateOfApplication: date, status: "pending" });
         this.setState({ applicant });
 
         var newJob = {
@@ -102,10 +104,9 @@ export default class Sop extends Component {
                 axios.post('http://localhost:4000/updateOpenApp', newUser)
                     .then(res => {
                         console.log(res.data)
+                        alert('SOP sent successfully')
+                        this.props.history.push('/applicantdash')                
                     })
-    
-                alert('SOP sent successfully')
-                this.props.history.push('/applicantdash')                
             })
             .catch((error) => {
                 console.log(error)
