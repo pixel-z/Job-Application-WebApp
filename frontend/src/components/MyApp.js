@@ -20,6 +20,8 @@ import InputAdornment from "@material-ui/core/InputAdornment";
 import SearchIcon from "@material-ui/icons/Search";
 import ArrowUpwardIcon from '@material-ui/icons/ArrowUpward';
 import ArrowDownwardIcon from '@material-ui/icons/ArrowDownward';
+import MenuItem from '@material-ui/core/MenuItem';
+import Select from '@material-ui/core/Select';
 
 export default class MyApp extends Component {
     
@@ -29,8 +31,9 @@ export default class MyApp extends Component {
             email: localStorage.getItem('email'),
             jobs: [],
             array: [],
+            users: [],
+            rating: 5,
         }
-        this.onSubmit = this.onSubmit.bind(this);
     }
 
 
@@ -48,6 +51,14 @@ export default class MyApp extends Component {
             console.log(error);
         })
 
+        await axios.get('http://localhost:4000/user')
+            .then(response => {
+                this.setState({users: response.data});
+            })
+            .catch(function(error) {
+                console.log(error);
+            })
+
         var arr=[];
         this.state.jobs.map((job) => {
             var applicant = job.applicant;
@@ -58,6 +69,8 @@ export default class MyApp extends Component {
                         dateOfJoining: applicant[i].dateOfJoining,
                         salary: job.salary,
                         name: job.name,
+                        status: applicant[i].status,
+                        email: job.email,
                     })
                 }
             }
@@ -66,9 +79,18 @@ export default class MyApp extends Component {
 
     }
 
-    onSubmit(e) {
-        e.preventDefault();
-
+    func(employee,ind) {
+        if (employee.status === 'accepted') {
+            return (
+                <Select id={ind} defaultValue='5'>
+                <MenuItem value='1'> 1</MenuItem>
+                <MenuItem value='2'> 2</MenuItem>
+                <MenuItem value='3'> 3</MenuItem>
+                <MenuItem value='4'> 4</MenuItem>
+                <MenuItem value='5'> 5</MenuItem>
+                </Select>   
+            )
+        }
     }
 
     render() {
@@ -93,7 +115,6 @@ export default class MyApp extends Component {
                                 <TableRow>
                                         <TableCell>Title</TableCell>
                                         <TableCell>Recruiter</TableCell>
-                                        <TableCell>Rating</TableCell>
                                         <TableCell>dateOfJoining</TableCell>
                                         <TableCell>Salary</TableCell>
                                         <TableCell>Rate</TableCell>
@@ -104,10 +125,9 @@ export default class MyApp extends Component {
                                     <TableRow key={ind}>
                                         <TableCell>{employee.title}</TableCell>
                                         <TableCell>{employee.name}</TableCell>
-                                        <TableCell>{employee.rating}</TableCell>
                                         <TableCell>{employee.dateOfJoining}</TableCell>
                                         <TableCell>{employee.salary}</TableCell>
-                                        <TableCell></TableCell>
+                                        <TableCell>{this.func(employee,ind)}</TableCell>
                                     </TableRow>
                             ))}
                             </TableBody>

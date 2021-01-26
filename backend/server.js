@@ -338,6 +338,22 @@ app.post('/changeJobStatus', (req, res) => {
         })
 })
 
+app.post('/updaterating', (req, res) => {
+    var update = {
+        rating: req.body.rating,
+    }
+    User.findOneAndUpdate({email: req.body.email},update,{runValidators: true})
+        .then(user => {
+            return res.status(200).json(user);
+        })
+        .catch(err => {
+            console.log(err);
+            res.status(400).send(err);  
+        })
+
+    
+})
+
 app.listen(PORT, () => {
     console.log(`Server running on port: ${PORT}`);
 });

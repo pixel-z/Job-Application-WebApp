@@ -195,7 +195,7 @@ export default class Employees extends Component {
                                         <TableCell><button style={this.state.grey} onClick={this.sortRating}>Rating</button></TableCell>
                                         <TableCell><button style={this.state.grey} onClick={this.sortDate}>dateOfJoining</button></TableCell>
                                         <TableCell>JobType</TableCell>
-                                        <TableCell>Rate(1-5)</TableCell>
+                                        <TableCell>Rate</TableCell>
                                 </TableRow>
                             </TableHead>
                             <TableBody>
@@ -206,7 +206,7 @@ export default class Employees extends Component {
                                         <TableCell>{employee.rating}</TableCell>
                                         <TableCell>{employee.dateOfJoining}</TableCell>
                                         <TableCell>{employee.jobtype}</TableCell>
-                                        <TableCell></TableCell>
+                                        <TableCell><button >Rate</button></TableCell>
                                     </TableRow>
                             ))}
                             </TableBody>

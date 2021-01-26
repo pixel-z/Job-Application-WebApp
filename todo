@@ -1,4 +1,6 @@
 rating implementation
-rating button in employees
+rating button in employees/recruiters
 job edit validator in JobView 
+
+
 change open_applications of user on delete job 
