@@ -6,6 +6,7 @@ const bodyParser = require('body-parser');
 const app = express();
 const PORT = 4000;
 const DB = 'db'
+var nodemailer = require('nodemailer')
 
 // Loading user model
 const User = require('./models/user');
@@ -330,6 +331,30 @@ app.post('/changeJobStatus', (req, res) => {
     Job.findOneAndUpdate({_id: req.body.id},update,{runValidators: true})
         .then(job => {
             console.log(job)
+
+            if (req.body.status === "accepted") {
+                var sender = nodemailer.createTransport(
+                {
+                    service: 'gmail',
+                    auth: {
+                        user: 'jobsriverr@gmail.com',
+                        pass: 'StrongPassword#123'
+                    }
+                });
+                var mail = { 
+                    from: "jobsriverr@gmail.com", 
+                    to: req.body.applEmail, 
+                    subject: "Job Application accepted", 
+                    text: "Your application for job " + req.body.title + " accepted by " + req.body.name
+                }; 
+                sender.sendMail(mail, function(error, info) { 
+                    if (error)
+                        console.log(error); 
+                    else 
+                        console.log("Email sent successfully: " + info.response);
+                });
+            }
+            
             return res.status(200).json(job);
         })
         .catch(err => {

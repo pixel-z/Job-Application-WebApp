@@ -157,6 +157,9 @@ export default class JobView extends Component {
             max_positions: this.state.job.max_positions,
             no_applications: this.state.job.no_applications,
             no_positions: this.state.job.no_positions,
+
+            status: "accepted",
+            applEmail: applicant.email,
         }
 
         axios.post('http://localhost:4000/changeJobStatus',val)
@@ -206,6 +209,8 @@ export default class JobView extends Component {
             max_positions: this.state.job.max_positions,
             no_applications: this.state.job.no_applications,
             no_positions: this.state.job.no_positions,
+
+            status: "rejected",
         }
 
         axios.post('http://localhost:4000/changeJobStatus',val)

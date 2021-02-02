@@ -227,6 +227,11 @@ class Applicationdash extends Component {
 
     buttonDisplay(job){
         var flag=0;
+        var date = new Date().toISOString();
+
+        if (job.deadline < date) {
+            return;
+        }
 
         for (let index = 0; index < job.applicant.length; index++) {
             if(job.applicant[index].email === localStorage.getItem("email")) {
@@ -274,6 +279,31 @@ class Applicationdash extends Component {
                 data:job
             });
         }
+    }
+
+    display(job,c) {
+        var date = new Date().toISOString();
+
+        if (job.deadline < date) {
+            return;
+        }
+
+        if(c==1)
+            return (<div>{job.title}</div>);
+        else if(c==2)
+            return (<div>{job.name}</div>);
+        else if(c==3)
+            return (<div>{job.email}</div>);
+        else if(c==4)
+            return (<div>{job.jobtype}</div>);
+        else if(c==5)
+            return (<div>{job.duration}</div>);
+        else if(c==6)
+            return (<div>{job.salary}</div>);
+        else if(c==7)
+            return (<div>{job.rating}</div>);
+        else if(c==8)
+            return (<div>{job.deadline}</div>);
     }
 
     render() {
@@ -389,14 +419,23 @@ class Applicationdash extends Component {
                                 <TableBody>
                                     {this.state.jobs.map((job,ind) => (
                                         <TableRow key={ind}>
-                                            <TableCell>{job.title}</TableCell>
+                                            {/* <TableCell>{job.title}</TableCell>
                                             <TableCell>{job.name}</TableCell>
                                             <TableCell>{job.email}</TableCell>
                                             <TableCell>{job.jobtype}</TableCell>
                                             <TableCell>{job.duration}</TableCell>
                                             <TableCell>{job.salary}</TableCell>
                                             <TableCell>{job.rating}</TableCell>
-                                            <TableCell>{job.deadline}</TableCell>
+                                            <TableCell>{job.deadline}</TableCell> */}
+
+                                            <TableCell>{this.display(job,1)}</TableCell>
+                                            <TableCell>{this.display(job,2)}</TableCell>
+                                            <TableCell>{this.display(job,3)}</TableCell>
+                                            <TableCell>{this.display(job,4)}</TableCell>
+                                            <TableCell>{this.display(job,5)}</TableCell>
+                                            <TableCell>{this.display(job,6)}</TableCell>
+                                            <TableCell>{this.display(job,7)}</TableCell>
+                                            <TableCell>{this.display(job,8)}</TableCell>
                                             {this.buttonDisplay(job)}
                                         </TableRow>
                                 ))}
